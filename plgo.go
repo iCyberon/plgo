@@ -52,7 +52,6 @@ func main() {
 			return
 		}
 	}
-	fmt.Println(tempPackagePath)
 	err = buildPackage(tempPackagePath, moduleWriter.PackageName)
 	if err != nil {
 		fmt.Println(err)
