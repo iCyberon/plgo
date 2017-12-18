@@ -1,15 +1,12 @@
-[![Report card](http://goreportcard.com/badge/microo8/plgo)](http://goreportcard.com/report/microo8/plgo)
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
-
 # plgo
+
+Forked from [Vlado Magyar](https://github.com/microo8/plgo)
+
 plgo is an tool for easily creating PostgreSQL extensions with stored procedures and triggers in golang. It creates wrapper code, PostgreSQL extension files and builds your package.
-
-contribution of all kind welcome!
-
 
 ## installation
 
-`go get -u github.com/microo8/plgo/...`
+`go get -u github.com/icyberon/plgo/...`
 
 ## write functions
 
@@ -25,8 +22,9 @@ package main
 import (
 	"log"
 	"strings"
+	"time"
 
-	"github.com/microo8/plgo"
+	"github.com/icyberon/plgo/plgo"
 )
 
 //from every exported function will be generated a stored procedure
@@ -112,7 +110,7 @@ output:
 (1 row)
 ```
 
-### use of goroutines
+## use of goroutines
 
 Using goroutines is possible, but very tricky. The allocation of the stack for the goroutine is bigger than [max_stack_depth](https://www.postgresql.org/docs/current/static/runtime-config-resource.html). Running an procedure that spins-up some goroutines ends with crashing:
 
@@ -128,3 +126,7 @@ But the size of allocated stack is checked by the DB only when calling some stat
 
 - Own type definition!
 - Background Worker Processes!
+
+## fork modifications
+- Clang support
+- Change structure
