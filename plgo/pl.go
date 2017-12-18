@@ -2,7 +2,7 @@ package plgo
 
 /*
 #cgo CFLAGS: -I/usr/include/postgresql/server
-#cgo LDFLAGS: -shared
+#cgo LDFLAGS: -Wl
 
 #include "postgres.h"
 #include "fmgr.h"

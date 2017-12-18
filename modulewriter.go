@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -99,9 +100,9 @@ func (mw *ModuleWriter) writeUserPackage(tempPackagePath string) error {
 }
 
 func (mw *ModuleWriter) writeplgo(tempPackagePath string) error {
-	plgoPath := filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "microo8", "plgo", "pl.go")
+	plgoPath := filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "icyberon", "plgo", "plgo", "pl.go")
 	if _, err := os.Stat(plgoPath); os.IsNotExist(err) {
-		return fmt.Errorf("Package github.com/microo8/plgo not installed\nplease install it with: go get -u github.com/microo8/plgo/... ")
+		return fmt.Errorf("Package github.com/icyberon/plgo not installed\nplease install it with: go get -u github.com/icyberon/plgo/... ")
 	}
 	plgoSourceBin, err := ioutil.ReadFile(plgoPath)
 	if err != nil {
@@ -114,6 +115,11 @@ func (mw *ModuleWriter) writeplgo(tempPackagePath string) error {
 		return fmt.Errorf("Cannot run pg_config: %s", err)
 	}
 	plgoSource = strings.Replace(plgoSource, "/usr/include/postgresql/server", string(postgresIncludeDir), 1)
+	ldflags := "-Wl,--unresolved-symbols=ignore-all"
+	if runtime.GOOS == "darwin" {
+    	ldflags = "-Wl,-undefined,dynamic_lookup"
+	}
+	plgoSource = strings.Replace(plgoSource, "-Wl", ldflags, 1)
 	var funcdec string
 	for _, f := range mw.functions {
 		funcdec += f.FuncDec()
